@@ -22,11 +22,25 @@ async function runTests() {
     setupTestProject();
     
     // Test case 1: Detect Internal/Pkg Structure
-    fs.mkdirSync(path.join(testRoot, 'internal'));
-    const patterns = scanProjectPattern(testRoot);
+    fs.mkdirSync(path.join(testRoot, 'internal'), { recursive: true });
+    let patterns = scanProjectPattern(testRoot);
     assert.ok(patterns.includes('Internal/Pkg Structure'), 'Should detect Internal/Pkg Structure');
     
-    console.log('✅ Task 1 tests passed');
+    // Test case 2: Detect CLI Command Structure
+    fs.mkdirSync(path.join(testRoot, 'cmd'), { recursive: true });
+    patterns = scanProjectPattern(testRoot);
+    assert.ok(patterns.includes('CLI Command Structure'), 'Should detect CLI Command Structure');
+
+    // Test case 3: Detect Web and PDM patterns
+    fs.mkdirSync(path.join(testRoot, 'src'), { recursive: true });
+    fs.writeFileSync(path.join(testRoot, 'package.json'), '{}');
+    fs.writeFileSync(path.join(testRoot, 'go.mod'), 'module test');
+    patterns = scanProjectPattern(testRoot);
+    assert.ok(patterns.includes('Web Application Structure'), 'Should detect Web Application Structure');
+    assert.ok(patterns.includes('Node.js Project (package.json)'), 'Should detect package.json');
+    assert.ok(patterns.includes('Go Module (go.mod)'), 'Should detect go.mod');
+    
+    console.log('✅ All tests passed');
   } catch (error) {
     console.error('❌ Task 1 tests failed:', error.message);
     process.exit(1);
