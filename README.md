@@ -54,13 +54,35 @@ node scripts/engine.cjs       # Start the pipeline
 
 ## 🛠 Core Pipeline
 
-`sdd-power` enforces a high-quality development lifecycle through a configuration-driven pipeline.
+`sdd-power` enforces a high-quality development lifecycle through a configuration-driven pipeline, optimized for **Gemini CLI Agents**.
 
 1.  **Specify**: Analyze requirements and generate `SPEC.md`.
 2.  **Plan**: Technical design phase (Backend/Client/DB). **[Human Gate]**
 3.  **Test-Plan**: Define test scenarios and acceptance criteria.
 4.  **Task**: Break down technical debt into actionable items in `TASKS.md`.
-5.  **Analyze**: Consistency check across all documents and standards.
+5.  **Analyze**: **Smart Analysis.** Automatically scans the codebase to ensure consistency between implementation, plans, and project standards.
+
+---
+
+## 🧠 Smart Analysis & Flow
+
+The engine features a "Smart Pipeline" that adapts to your project's architecture.
+
+### Guided Mode vs. Strict Mode
+- **Guided Mode (Default)**: The engine analyzes your codebase, suggests patterns, and asks for confirmation at critical gates. Perfect for exploring new architectures.
+- **Strict Mode**: Enforces rigid compliance with `CONSTITUTION.md` and pre-defined pipeline steps. Best for established production repos.
+
+### Execution Flow
+```mermaid
+graph TD
+    A[User Request] --> B{Smart Analysis}
+    B -->|Scan Patterns| C[Generate SPEC]
+    C --> D[Plan Phase]
+    D -->|Human Approval| E[Implementation]
+    E --> F{Consistency Check}
+    F -->|Pass| G[Complete]
+    F -->|Fail| D
+```
 
 ---
 
