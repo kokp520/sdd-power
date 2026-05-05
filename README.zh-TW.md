@@ -4,6 +4,10 @@
 
 # SDD Power
 
+<p align="center">
+  <a href="README.md">English</a> | <b>繁體中文</b>
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 **專為 Gemini CLI Agent 設計的標準化 SDD 管線。零學習成本，極致品質控管。**

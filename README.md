@@ -4,6 +4,10 @@
 
 # SDD Power
 
+<p align="center">
+  <b>English</b> | <a href="README.zh-TW.md">繁體中文</a>
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/adiwu/pjm-spacer?style=flat&color=yellow)](https://github.com/adiwu/pjm-spacer/stargazers)
 
