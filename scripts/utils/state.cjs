@@ -5,14 +5,16 @@ const SDD_STATE_PATH = '.sdd/state.json';
 
 function loadState(projectRoot) {
   const fullPath = path.join(projectRoot, SDD_STATE_PATH);
+  const defaultState = { current_step: null, mode: 'guided', context: {}, history: [] };
   if (fs.existsSync(fullPath)) {
     try {
-      return JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+      const savedState = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+      return { ...defaultState, ...savedState };
     } catch (e) {
-      return { current_step: null, history: [] };
+      return defaultState;
     }
   }
-  return { current_step: null, history: [] };
+  return defaultState;
 }
 
 function saveState(projectRoot, state) {

@@ -1,6 +1,23 @@
 const { loadConfig } = require('./utils/config.cjs');
 const { loadState, saveState } = require('./utils/state.cjs');
 
+/**
+ * Generates structured context for the current step.
+ * @param {string} stepName 
+ * @param {string} projectRoot 
+ * @param {object} state 
+ */
+async function generateStepContext(stepName, projectRoot, state) {
+  const { scanProjectPattern } = require('./utils/analysis.cjs');
+  const patterns = scanProjectPattern(projectRoot);
+  return {
+    step: stepName,
+    mode: state.mode || 'guided',
+    patterns: patterns,
+    timestamp: new Date().toISOString()
+  };
+}
+
 async function runPipeline(projectRoot, targetStep = null) {
   const config = loadConfig(projectRoot);
   let state = loadState(projectRoot);
@@ -26,8 +43,9 @@ async function runPipeline(projectRoot, targetStep = null) {
     saveState(projectRoot, state);
 
     if (step.require_approval) {
+      const context = await generateStepContext(step.name, projectRoot, state);
       console.log(`[PAUSED] Step ${step.name} requires approval.`);
-      // The Skill (AI) will handle the ask_user part based on this output.
+      console.log(`[CONTEXT] ${JSON.stringify(context)}`);
       break; 
     }
   }
@@ -35,7 +53,11 @@ async function runPipeline(projectRoot, targetStep = null) {
   console.log('Pipeline execution finished or paused for approval.');
 }
 
-const projectRoot = process.argv[2] || process.cwd();
-const targetStep = process.argv[3] || null;
+module.exports = { runPipeline, generateStepContext };
 
-runPipeline(projectRoot, targetStep).catch(console.error);
+// Run if called directly
+if (require.main === module) {
+  const projectRoot = process.argv[2] || process.cwd();
+  const targetStep = process.argv[3] || null;
+  runPipeline(projectRoot, targetStep).catch(console.error);
+}
