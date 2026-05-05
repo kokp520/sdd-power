@@ -8,128 +8,70 @@
   <b>English</b> | <a href="README.zh-TW.md">繁體中文</a>
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/adiwu/pjm-spacer?style=flat&color=yellow)](https://github.com/adiwu/pjm-spacer/stargazers)
+**High-Performance SDD Pipeline for AI-Native Development.**
 
-**Standardized SDD Pipeline for Gemini CLI Agents. Zero friction, total control.**
-
-[Quick Start](#quick-start) | [Core Pipeline](#core-pipeline) | [Configuration](#configuration) | [Templates](#templates)
-
----
-
-## 🚀 Quick Start
-
-### 1. Package the skill
-```bash
-node /opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/builtin/skill-creator/scripts/package_skill.cjs sdd-power/ .
-```
-
-### 2. Install to your favorite Agent
-
-#### Gemini CLI
-```bash
-gemini skills install sdd-power.skill --scope user
-/skills reload
-```
-
-#### Claude Code
-```bash
-claudecode skills install sdd-power.skill --scope user
-/skills reload
-```
-
-#### Codex
-```bash
-codex skills install sdd-power.skill --scope user
-/skills reload
-```
-
-### 3. Initialize your project
-```bash
-node scripts/init.cjs         # Setup .sdd/ environment
-node scripts/engine.cjs       # Start the pipeline
-```
+`sdd-power` provides a standardized Specification-Driven Development (SDD) framework that bridges the gap between raw requirements and executable tasks. It is designed to work seamlessly across different AI environments, including CLI agents and AI-integrated IDEs.
 
 ---
 
 ## 🛠 Core Pipeline
 
-`sdd-power` enforces a high-quality development lifecycle through a configuration-driven pipeline, optimized for **Gemini CLI Agents**.
+The pipeline enforces a structured development lifecycle to ensure code quality and architectural consistency:
 
-1.  **Specify**: Analyze requirements and generate `SPEC.md`.
-2.  **Plan**: Technical design phase (Backend/Client/DB). **[Human Gate]**
+1.  **Specify**: Analyze input and generate structured `SPEC.md`.
+2.  **Plan**: Technical design phase (Architecture/Schema/Patterns). **[Human Approval]**
 3.  **Test-Plan**: Define test scenarios and acceptance criteria.
-4.  **Task**: Break down technical debt into actionable items in `TASKS.md`.
-5.  **Analyze**: **Smart Analysis.** Automatically scans the codebase to ensure consistency between implementation, plans, and project standards.
+4.  **Task**: Decompose plans into granular, actionable items in `TASKS.md`.
+5.  **Analyze**: Smart consistency check across all documents and codebase.
 
 ---
 
-## 🧠 Smart Analysis & Flow
+## 🚀 Getting Started
 
-The engine features a "Smart Pipeline" that adapts to your project's architecture.
+### 1. Installation
 
-### Guided Mode vs. Strict Mode
-- **Guided Mode (Default)**: The engine analyzes your codebase, suggests patterns, and asks for confirmation at critical gates. Perfect for exploring new architectures.
-- **Strict Mode**: Enforces rigid compliance with `CONSTITUTION.md` and pre-defined pipeline steps. Best for established production repos.
+Package the skill for your preferred environment:
+```bash
+node scripts/package.cjs .
+```
 
-### Execution Flow
-```mermaid
-graph TD
-    A[User Request] --> B{Smart Analysis}
-    B -->|Scan Patterns| C[Generate SPEC]
-    C --> D[Plan Phase]
-    D -->|Human Approval| E[Implementation]
-    E --> F{Consistency Check}
-    F -->|Pass| G[Complete]
-    F -->|Fail| D
+Support for major AI platforms:
+- **Gemini CLI / Claude Code / Codex**: `[agent] skills install sdd-power.skill --scope user`
+- **Cursor / Windsurf / Roo Code**: Add `.sdd/CONSTITUTION.md` to your project rules or system prompts.
+
+### 2. Initialization
+```bash
+node scripts/init.cjs         # Initialize .sdd/ environment
+node scripts/engine.cjs       # Execute pipeline
 ```
 
 ---
 
-## ⚙️ Configuration
+## 📄 Document-Driven Workflow
 
-Fully customizable via `.sdd/config.json`. Add your own scripts or enforce manual approvals at any stage.
+`sdd-power` centers around three core documents that guide the AI through the development process:
 
-```json
-{
-  "pipeline": [
-    { "name": "specify", "type": "standard" },
-    { 
-      "name": "plan", 
-      "require_approval": true, 
-      "approval_message": "Please review the technical path." 
-    },
-    { "name": "security_check", "type": "script", "path": "scripts/audit.js" }
-  ]
-}
-```
+1. **`SPEC.md` (The "What")**: Defines requirements and scope.
+2. **`PLAN.md` (The "How")**: Technical strategy and architectural decisions. **Modify this to steer the AI's technical direction.**
+3. **`TASKS.md` (The "Action")**: Granular task list. AI executes these one by one, ensuring high-fidelity implementation.
 
 ---
 
-## 📂 Templates
+## 🧠 Smart Context Analysis
 
-Built-in high-quality templates found in `.sdd/templates/`:
-- `SPEC.md`: User stories & requirements.
-- `PLAN.md`: System architecture & DB changes.
-- `TEST_PLAN.md`: Unit & Integration testing.
-- `TASKS.md`: Execution tracking.
-- `CONSTITUTION.md`: Project-specific coding standards.
+The engine adapts to your project's complexity:
+- **Guided Mode**: AI scans your codebase, suggests relevant files, and asks for confirmation before planning.
+- **Strict Mode**: Automatically active for large changes. Enforces `CONSTITUTION.md` rules and mandatory test coverage.
 
 ---
 
 ## 📋 Requirements
 
 - **Node.js 20+**
-- **[Gemini CLI](https://github.com/google-gemini/gemini-cli)**
+- Compatible with any LLM-powered development tool.
 
 ---
 
 ## 📄 License
 
 MIT
-
----
-
-<div align="center">
-  Crafted for adiwu
-</div>

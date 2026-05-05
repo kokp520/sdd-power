@@ -8,127 +8,70 @@
   <a href="README.md">English</a> | <b>繁體中文</b>
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+**專為 AI 原生開發打造的高效能 SDD 管線。**
 
-**專為 Gemini CLI Agent 設計的標準化 SDD 管線。零學習成本，極致品質控管。**
+`sdd-power` 提供標準化的規格驅動開發 (SDD) 框架，將原始需求轉化為可執行的任務。本工具設計上具備高度通用性，支援各種 AI Agent、CLI 助理以及 AI 整合型 IDE。
 
-[快速啟動](#快速啟動) | [核心流程](#核心流程) | [進階配置](#進階配置) | [文件範本](#文件範本)
+---
+
+## 🛠 核心管線 (Core Pipeline)
+
+本管線強制執行結構化的開發生命週期，確保程式碼品質與架構一致性：
+
+1.  **Specify (需求定義)**：分析輸入需求，生成結構化的 `SPEC.md`。
+2.  **Plan (技術規劃)**：技術設計階段（架構/模式/Schema）。 **[需人工審核]**
+3.  **Test-Plan (測試規劃)**：定義測試情境與驗收標準。
+4.  **Task (任務拆解)**：將計畫拆解為 `TASKS.md` 中微型且可執行的項目。
+5.  **Analyze (智慧分析)**：執行跨文件與程式碼庫的一致性檢查。
 
 ---
 
 ## 🚀 快速啟動
 
-### 1. 打包技能
+### 1. 安裝方式
+
+針對您的開發環境打包技能：
 ```bash
-node /opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/builtin/skill-creator/scripts/package_skill.cjs sdd-power/ .
+node scripts/package.cjs .
 ```
 
-### 2. 安裝至您喜愛的 Agent
+支援主要 AI 平台：
+- **Gemini CLI / Claude Code / Codex**: `[agent] skills install sdd-power.skill --scope user`
+- **Cursor / Windsurf / Roo Code**: 將 `.sdd/CONSTITUTION.md` 加入專案規則或系統提示詞 (System Prompts)。
 
-#### Gemini CLI
-```bash
-gemini skills install sdd-power.skill --scope user
-/skills reload
-```
-
-#### Claude Code
-```bash
-claudecode skills install sdd-power.skill --scope user
-/skills reload
-```
-
-#### Codex
-```bash
-codex skills install sdd-power.skill --scope user
-/skills reload
-```
-
-### 3. 初始化專案
+### 2. 專案初始化
 ```bash
 node scripts/init.cjs         # 初始化 .sdd/ 環境與範本
-node scripts/engine.cjs       # 啟動開發管線
+node scripts/engine.cjs       # 執行管線
 ```
 
 ---
 
-## 🛠 核心流程 (Pipeline)
+## 📄 文件驅動工作流
 
-`sdd-power` 透過配置驅動的管線，為 **Gemini CLI Agent** 強制執行高品質的開發生命週期。
+`sdd-power` 的核心在於透過三份關鍵文件引導 AI 進行開發：
 
-1.  **Specify (需求定義)**：分析對話，產出 `SPEC.md`。
-2.  **Plan (技術規劃)**：設計實作路徑（後端/前端/資料庫）。 **[人工審核點]**
-3.  **Test-Plan (測試規劃)**：定義測試情境與驗收標準。
-4.  **Task (任務拆解)**：將計畫轉化為 `TASKS.md` 中的可執行項。
-5.  **Analyze (智慧分析)**：自動掃描程式碼庫，確保實作、計畫與專案規範的一致性。
+1. **`SPEC.md` (做什麼)**：定義需求與範疇。
+2. **`PLAN.md` (怎麼做)**：技術策略與架構決策。**透過修改此文件來引導 AI 的技術方向。**
+3. **`TASKS.md` (執行點)**：微型任務清單。AI 將逐項執行，確保實作與計畫高度一致。
 
 ---
 
-## 🧠 智慧分析與流程
+## 🧠 智慧上下文分析 (Smart Context Analysis)
 
-SDD 引擎具備「智慧管線」功能，能自動適應您的專案架構。
-
-### 引導模式 vs. 規範模式
-- **引導模式 (預設)**：引擎會分析您的程式碼庫，建議合適的模式，並在關鍵關卡請求人工確認。非常適合探索新架構。
-- **規範模式**：嚴格強制執行 `CONSTITUTION.md`（憲法）中定義的規範與管線步驟。適用於已成熟的生產環境。
-
-### 執行流程
-```mermaid
-graph TD
-    A[使用者請求] --> B{智慧分析}
-    B -->|掃描架構模式| C[產出規格 SPEC]
-    C --> D[規劃階段 Plan]
-    D -->|人工審核| E[實作階段]
-    E --> F{一致性檢查}
-    F -->|通過| G[完成]
-    F -->|失敗| D
-```
-
----
-
-## ⚙️ 進階配置
-
-透過 `.sdd/config.json` 全面自訂流程。您可以隨時插入自定義腳本或設定人工審核。
-
-```json
-{
-  "pipeline": [
-    { "name": "specify", "type": "standard" },
-    { 
-      "name": "plan", 
-      "require_approval": true, 
-      "approval_message": "請審核技術實作路徑是否正確。" 
-    },
-    { "name": "security_check", "type": "script", "path": "scripts/audit.js" }
-  ]
-}
-```
-
----
-
-## 📂 文件範本
-
-預設於 `.sdd/templates/` 提供高品質範本：
-- `SPEC.md`：用戶故事與功能需求。
-- `PLAN.md`：系統架構與資料庫異動。
-- `TEST_PLAN.md`：單元測試與集成測試方案。
-- `TASKS.md`：執行進度追蹤。
-- `CONSTITUTION.md`：專案專屬的編碼規範（憲法）。
+引擎會根據專案的複雜度自動調整：
+- **引導模式 (Guided Mode)**：AI 掃描程式碼庫，列出相關檔案並在規劃前請求您的確認。
+- **規範模式 (Strict Mode)**：偵測到大型變動時自動啟動。強制執行 `CONSTITUTION.md` 規範與測試覆蓋率。
 
 ---
 
 ## 📋 系統需求
 
 - **Node.js 20+**
-- **[Gemini CLI](https://github.com/google-gemini/gemini-cli)**
+- 相容於任何基於 LLM 的開發工具。
 
 ---
 
 ## 📄 授權協議
 
 MIT
-
----
-
-<div align="center">
-  由 adiwu 精心打造
-</div>
